@@ -32,9 +32,8 @@ jobs:
         username: ${{ secrets.MAIL_ACCOUNT }}
         password: ${{ secrets.MAIL_PASSWORD }}
         subject: GitHub Actions Mail Test
-        to: jonatanm@dico.me
-        from: john.doe@example.org
+        to: Arkatro@gmail.com
+        from: novit@prueba.com.ar
         content_type: text/html
         body: |
-          <h1>Hola!</h1>
-          <p>Este es un mail de prueba desde GitHub Actions con DebugMail.</p>
+          Mensaje de prueba
