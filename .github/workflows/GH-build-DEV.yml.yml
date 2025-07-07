@@ -36,4 +36,4 @@ jobs:
         from: novit@prueba.com.ar
         content_type: text/html
         body: |
-          Mensaje de prueba
+          Pipeline ejecutado exitosamente
