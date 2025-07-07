@@ -24,3 +24,17 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
+    - name: Send email
+      uses: dawidd6/action-send-mail@v3
+      with:
+        server_address: app.debugmail.io
+        server_port: 25
+        username: ${{ secrets.MAIL_ACCOUNT }}
+        password: ${{ secrets.MAIL_PASSWORD }}
+        subject: GitHub Actions Mail Test
+        to: jonatanm@dico.me
+        from: john.doe@example.org
+        content_type: text/html
+        body: |
+          <h1>Hola!</h1>
+          <p>Este es un mail de prueba desde GitHub Actions con DebugMail.</p>
