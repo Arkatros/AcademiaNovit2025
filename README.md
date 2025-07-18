@@ -25,11 +25,6 @@ cd AcademiaNovit2025
 dotnet restore
 ```
 
-3. Aplica las migraciones para configurar la base de datos:
-
-```bash
-dotnet ef database update --project AcademiaNovit
-```
 ## Base de datos (Postgres con Docker)
 
 Para levantar una instancia de Postgres como container de docker se debe:
@@ -37,13 +32,13 @@ Para levantar una instancia de Postgres como container de docker se debe:
 - Desde la terminal/CMD/powershell ejecutar el siguiente comando:
 
 ```sh
-docker run -n academia -p 5432:5432 -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=tivon1234 -d postgres:17.5
+docker run --name academianovit -p 5432:5432 -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=tivon1234 -d postgres:17.5
 ```
 
 ## Ejecución del Proyecto
 
 Desde la Línea de Comandos
-1. Navega al directorio del proyecto principal:
+1. Navega al directorio del proyecto principal de la Web API:
 
 ```bash
 cd AcademiaNovit

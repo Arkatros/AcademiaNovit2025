@@ -2,6 +2,7 @@ using AcademiaNovit.Models;
 using AcademiaNovit.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace AcademiaNovit.Controllers;
 
@@ -20,6 +21,7 @@ public class ProductController : ControllerBase
     public async Task<IActionResult> GetProducts()
     {
         var products = await _db.Products.ToListAsync();
+        Log.Information("Read: {@products}", products);
         return Ok(products);
     }
 
@@ -28,6 +30,7 @@ public class ProductController : ControllerBase
     {
         var product = await _db.Products.FindAsync(id);
         if (product == null) return NotFound();
+        Log.Information("Read: {@product}", product);
         return Ok(product);
     }
 
@@ -39,7 +42,7 @@ public class ProductController : ControllerBase
         {
             return BadRequest(validation.ErrorMessage);
         }
-
+        Log.Information("Create: {@product}", product);
         _db.Products.Add(product);
         await _db.SaveChangesAsync();
         return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, product);
@@ -55,6 +58,7 @@ public class ProductController : ControllerBase
         }
 
         var product = await _db.Products.FindAsync(id);
+        Log.Information("Update: {@product}", product);
         if (product == null) return NotFound();
 
         product.Name = updatedProduct.Name;
@@ -69,7 +73,7 @@ public class ProductController : ControllerBase
     {
         var product = await _db.Products.FindAsync(id);
         if (product == null) return NotFound();
-
+        Log.Information("Remove: {@product}", product);
         _db.Products.Remove(product);
         await _db.SaveChangesAsync();
 
