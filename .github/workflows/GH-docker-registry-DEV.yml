@@ -12,4 +12,12 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
-          script: whoami
+          script: |
+            if [ -d AcademiaNovit2025]; then
+            cd academianovit2025
+            git fetch
+            git pull
+            else
+            git clone https://github.com/Arkatros/AcademiaNovit2025
+            cd academianovit2025
+            ls -al
