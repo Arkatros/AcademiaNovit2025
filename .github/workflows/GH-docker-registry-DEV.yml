@@ -13,11 +13,13 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            if [ -d AcademiaNovit2025]; then
-            cd academianovit2025
-            git fetch
-            git pull
+            if [ -d "AcademiaNovit2025" ]; then
+              cd AcademiaNovit2025
+              git fetch
+              git pull
             else
-            git clone https://github.com/Arkatros/AcademiaNovit2025
-            cd academianovit2025
+              git clone https://github.com/Arkatros/AcademiaNovit2025
+              cd AcademiaNovit2025
+            fi
+            
             ls -al
