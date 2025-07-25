@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Docker registry
 
 on:
   push:
