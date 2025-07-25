@@ -1,0 +1,17 @@
+
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: nginx-static
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./sample_html.html:/usr/share/nginx/html/index.html
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - web
+    restart: unless-stopped
+networks:
+  web:
+    driver: bridge

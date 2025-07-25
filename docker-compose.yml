@@ -1,0 +1,22 @@
+services:
+  academia:
+    container_name: academia
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:5000"
+    restart: unless-stopped
+    networks:
+      - app
+    secrets:
+      - db_connection_string
+    environment:
+      DB_CONNECTION_STRING_FILE: /run/secrets/db_connection_string
+      ConnectionStrings__DefaultConnection: "Host=host.docker.internal;Port=5432;Database=AcademiaNovitDB;Username=postgres;Password=changeme"
+secrets:
+  db_connection_string:
+    file: ./secrets/db_connection_string.txt
+networks:
+  app:
+    driver: bridge
