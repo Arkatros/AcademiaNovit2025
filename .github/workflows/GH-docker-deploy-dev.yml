@@ -26,7 +26,6 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
-          script: |
-            docker compose -f "docker-ubuntu.yml" up -d
+          script: docker compose -f "docker-ubuntu.yml" up -d
 
       
