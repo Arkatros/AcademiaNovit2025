@@ -1,22 +1,31 @@
 services:
+  postgres:
+    container_name: postgres_db
+    image: postgres:17.5
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: tivon1234
+    ports:
+      - "5432:5432"
+    networks:
+      - app
+    restart: unless-stopped
+  
   academia:
     container_name: academia
     build:
       context: .
       dockerfile: Dockerfile
+    depends_on:
+      - postgres
     ports:
       - "8080:5000"
     restart: unless-stopped
     networks:
       - app
-    secrets:
-      - db_connection_string
     environment:
-      DB_CONNECTION_STRING_FILE: /run/secrets/db_connection_string
-      ConnectionStrings__DefaultConnection: "Host=host.docker.internal;Port=5432;Database=AcademiaNovitDB;Username=postgres;Password=changeme"
-secrets:
-  db_connection_string:
-    file: ./secrets/db_connection_string.txt
+      ConnectionStrings__DefaultConnection: "Host=postgres_db;Port=5432;Database=AcademiaNovitDB;Username=admin;Password=tivon1234"
+
 networks:
   app:
     driver: bridge
