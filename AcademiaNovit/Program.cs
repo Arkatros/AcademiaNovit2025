@@ -6,38 +6,41 @@ using Serilog.Sinks.Grafana.Loki;
 
 var builder = WebApplication.CreateBuilder(args);
 
-#region configuracion del Serilog
+#region Configuración de Serilog
 
+// Cargar configuración desde appsettings.json
 builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
-builder.Host.UseSerilog(
-    (context, loggerConfiguration) => loggerConfiguration
-    .ReadFrom.Configuration(context.Configuration)
-    .Enrich.FromLogContext()
-    .Enrich.WithProperty("app","academia")
-    .WriteTo.GrafanaLoki("http://localhost:3100")
-    .CreateLogger()
-    );
+// Configurar Serilog usando la configuración del JSON
+builder.Host.UseSerilog((context, loggerConfiguration) =>
+{
+    loggerConfiguration
+        .ReadFrom.Configuration(context.Configuration) // Lee sinks y niveles desde appsettings.json
+        .Enrich.FromLogContext()
+        .Enrich.WithProperty("app", "academia"); // Etiqueta global para Loki
+});
 
-# endregion
+#endregion
 
-#region leer variables de entorno
+#region Variables de entorno
 
 builder.Configuration.AddEnvironmentVariables();
 
 #endregion
 
+// Conexión a la base de datos
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 
+// OpenAPI y controladores
 builder.Services.AddOpenApi();
-
 builder.Services.AddControllers();
 
 var app = builder.Build();
 
+// Migraciones automáticas al iniciar
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -46,19 +49,16 @@ using (var scope = app.Services.CreateScope())
 
 app.MapOpenApi();
 app.MapScalarApiReference();
-
 app.MapControllers();
 
-#region keep alive endpoint
-
+#region Endpoint Keep Alive
 app.MapGet("/keep-alive", () => new
 {
     status = "alive",
     timestamp = DateTime.UtcNow
 });
-
 #endregion
 
 app.Run();
 
-public partial class Program { } // This partial class is required for the WebApplicationFactory to work properly in tests. 
+public partial class Program { }
