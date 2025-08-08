@@ -1,6 +1,5 @@
 services:
   postgres:
-    container_name: postgres_db
     image: postgres:17.5
     environment:
       POSTGRES_USER: admin
@@ -10,21 +9,22 @@ services:
     networks:
       - app
     restart: unless-stopped
-  
+
   academia:
-    container_name: academia
     image: ghcr.io/arkatros/academianovit:latest
     depends_on:
       - postgres
     ports:
-      - "8000:5000"
-    restart: unless-stopped
-    pull_policy: always
+      - "8080:5000"
     networks:
       - app
     environment:
       ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=AcademiaNovitDB;Username=admin;Password=tivon1234"
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
 
 networks:
   app:
-    driver: bridge
+    driver: overlay

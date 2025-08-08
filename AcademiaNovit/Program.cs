@@ -2,6 +2,7 @@ using AcademiaNovit;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using Serilog;
+using Serilog.Sinks.Grafana.Loki;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,10 +10,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
-builder.Host.UseSerilog((context, loggerConfiguration) => loggerConfiguration
+builder.Host.UseSerilog(
+    (context, loggerConfiguration) => loggerConfiguration
     .ReadFrom.Configuration(context.Configuration)
     .Enrich.FromLogContext()
-    .WriteTo.Console());
+    .Enrich.WithProperty("app","academia")
+    .WriteTo.GrafanaLoki("http://localhost:3100")
+    .CreateLogger()
+    );
 
 # endregion
 
